@@ -30,7 +30,7 @@ while 1:
     
     
     
-    #First detect face and then look for eyes inside the face.
+    #DETECT FACE USING HAAR and THEN PREDICTION USING CAFFE.
     for (x,y,w,h) in faces:
         print(x,y,w,h)
         cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
