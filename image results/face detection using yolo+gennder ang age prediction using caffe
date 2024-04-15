@@ -1,0 +1,152 @@
+#using Utk face dataset
+#downlaod and sampled upto 60 images for testing the algorithm
+#https://www.kaggle.com/datasets/jangedoo/utkface-new
+
+
+import os
+import pandas as pd
+import numpy as np
+import cv2
+import os
+import os
+from ultralytics import YOLO
+
+#creating dataframe to store orginal age and gender of the images
+# Path to the directory containing the image files
+directory = 'C://Users/gauth/OneDrive/Desktop/DIP PROJECT/yolo_images'
+
+# List to store extracted information
+data = []
+
+# Iterate over files in the directory
+for filename in os.listdir(directory):
+    # Split filename by ".chip" to get the main part
+    main_part = filename.split(".chip")[0]
+    
+    # Split main part by "_" to extract age and gender
+    age, gender, *rest = main_part.split("_")
+    
+    # Convert gender to string representation
+    gender = "Male" if gender == "0" else "Female"
+    
+    # Join the rest of the filename back together (if any)
+    rest = "_".join(rest)
+    
+    # Append extracted information to the list
+    data.append({'Filename': filename, 'Age': int(age), 'Gender': gender})
+
+# Create DataFrame from the extracted information
+df = pd.DataFrame(data)
+
+# Display the DataFrame
+print(df)
+
+
+#laading the Models 
+face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+
+ageProto = "age_deploy.prototxt"
+ageModel = "age_net.caffemodel"
+
+genderProto = "gender_deploy.prototxt"
+genderModel = "gender_net.caffemodel"
+
+ageNet = cv2.dnn.readNet(ageModel, ageProto)
+genderNet = cv2.dnn.readNet(genderModel, genderProto)
+
+MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
+ageList = ['(0-2)', '(4-6)', '(8-12)', '(15-20)', '(25-32)', '(38-43)', '(48-53)', '(60-100)']
+genderList = ['Male', 'Female']
+
+
+
+
+#looping over UTK face images and predicting age and gender
+folder_path = 'C://Users/gauth/OneDrive/Desktop/DIP PROJECT/yolo_images'
+
+# List all image files in the folder
+
+image_files = [os.path.join(folder_path, file) for file in os.listdir(folder_path) ]
+print(len(image_files))
+# Iterate over each image
+result_list=[]
+model=YOLO("yolov8n-face.pt")
+for image_file in image_files:
+    # Read image
+    img = cv2.imread(image_file)
+    results=model(img)
+    result_list.append(results)
+    boxes=results[0].boxes
+    
+    
+   
+    for box in boxes:
+        top_left_x=int(box.xyxy.tolist()[0][0])
+        top_left_y=int(box.xyxy.tolist()[0][1])
+        bottom_right_x=int(box.xyxy.tolist()[0][2])
+        bottom_right_y=int(box.xyxy.tolist()[0][3])
+        
+        cv2.rectangle(img,( top_left_x,top_left_y),(bottom_right_x,  bottom_right_y),(255,0,0),2)
+        detected_face=img[top_left_y:bottom_right_y,  top_left_x:bottom_right_x]
+        
+        detected_face_blob = cv2.dnn.blobFromImage(detected_face, 1.0, (227, 227), MODEL_MEAN_VALUES, swapRB=False)
+       
+        
+        genderNet.setInput(detected_face_blob)
+        ageNet.setInput(detected_face_blob)
+        
+        genderPreds = genderNet.forward()
+       
+        
+        gender = genderList[genderPreds[0].argmax()]
+        
+        
+        agePreds=ageNet.forward()
+        
+        age = ageList[agePreds[0].argmax()]
+        
+        
+        label = "{}{}".format(gender,age)
+       
+        cv2.putText(img, label, (top_left_x+30, top_left_y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1, cv2.LINE_AA)
+        cv2.imshow("faces",detected_face)
+        #df = df.append({'Filename': os.path.basename(image_file), 'Predicted Gender': gender, 'Age': age}, ignore_index=True)
+        df.loc[df['Filename'] == os.path.basename(image_file), 'Predicted_Gender'] = gender
+        df.loc[df['Filename'] == os.path.basename(image_file), 'Predicted_Age'] = age
+    cv2.imshow("ok",img)
+   
+    cv2.waitKey(0)
+    
+
+       
+
+cv2.destroyAllWindows()    
+
+
+
+
+#checking the accuarcy of predictions
+# Calculate accuracy for predicted age
+correct_age_predictions = 0
+for index, row in df.iterrows():
+    actual_age = row['Age']
+    predicted_age_range = row['Predicted_Age']
+    if isinstance(predicted_age_range, str):  # Check if the predicted age range is a string
+        predicted_age_start, predicted_age_end = map(int, predicted_age_range.strip('()').split('-'))  # Extract start and end of predicted age range
+        if actual_age >= predicted_age_start and actual_age <= predicted_age_end:
+            correct_age_predictions += 1
+
+total_images = df.shape[0]
+age_accuracy = correct_age_predictions / total_images * 100
+
+
+
+# Calculate accuracy for predicted gender
+correct_gender_predictions = (df['Gender'] == df['Predicted_Gender']).sum()
+gender_accuracy = correct_gender_predictions / total_images * 100
+
+# Print results
+print("Accuracy for predicted age: {:.2f}%".format(age_accuracy))
+print("Accuracy for predicted gender: {:.2f}%".format(gender_accuracy))
+
+        
