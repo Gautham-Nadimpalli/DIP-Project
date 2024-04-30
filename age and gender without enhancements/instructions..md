@@ -19,7 +19,7 @@ The script uses a pre-trained deep learning model for face detection and two sep
 
 1. Clone the repository:
 
-git clone https://github.com/yourusername/age-gender-prediction.git
+git clone https://github.com/Gautham-Nadimpalli/DIP-Project.git
 cd age-gender-prediction
 
 
