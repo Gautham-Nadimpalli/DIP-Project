@@ -32,7 +32,7 @@ pip install opencv-python numpy
 
 1. Run the script:
 
-python age_gender_prediction.py
+python age_gender_prediction_video_model1.py
 
 2. The webcam feed will open, and faces will be detected and labeled with predicted gender and age.
 
@@ -40,11 +40,10 @@ python age_gender_prediction.py
 
 ## Configuration
 
-- Ensure that the required pre-trained model files (`age_deploy.prototxt`, `age_net.caffemodel`, `gender_deploy.prototxt`, `gender_net.caffemodel`) are present in the same directory as the script.
+- Ensure the pre-trained model files (`age_deploy.prototxt`, `age_net.caffemodel`, `gender_deploy.prototxt`, `gender_net.caffemodel`) are present in the same directory as the script.
 
 ## Notes
-
-- The face detection is based on the Haar Cascade classifier (`haarcascade_frontalface_default.xml`). Ensure it is present in the project directory or provide the correct path in the code.
+- The face detection is based on the Haar Cascade classifier (`haarcascade_frontalface_default.xml`).Please ensure it is present in the project directory or provide the correct path in the code.
 
 
 
