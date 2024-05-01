@@ -19,3 +19,9 @@ This is a trained deep learning model for predicting gender from facial images.
 ## Trained Age Model (CNN_age_model.h5):
 This is a trained deep learning model for predicting age from facial images.
 
+
+#Instructions:
+These are all the required files that we used in the project.caffe model weights and protxt files are attached.please make sure whenver running the code snipptes
+from https://github.com/Gautham-Nadimpalli/DIP-Project/tree/main/age%20and%20gender%20prediction%20video%20code , these models are placed in the same directory as the python code.
+
+
