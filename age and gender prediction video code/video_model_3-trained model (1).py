@@ -1,25 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
 
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[4]:
 
 
 from keras.models import load_model
@@ -31,8 +13,8 @@ import numpy as np
 
 face_classifier=cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
-age_model = load_model('CNN_age.h5')
-gender_model = load_model('CNN_gender.h5')
+age_model = load_model('CNN_age_model.h5')
+gender_model = load_model('CNN_gender_model.h5')
 
 gender_labels = ['Male', 'Female']
 
@@ -63,62 +45,19 @@ while True:
         age_label_position=(x+h,y+h)
         cv2.putText(frame,"Age="+str(age),age_label_position,cv2.FONT_HERSHEY_SIMPLEX,1,(0,255,0),2)
         
-    cv2.imshow('Emotion Detector', frame)
+    cv2.imshow('age and gender detector', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 cap.release()
 cv2.destroyAllWindows()
 
 
-# In[ ]:
 
 
 
 
 
-# In[ ]:
 
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
