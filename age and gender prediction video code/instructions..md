@@ -29,14 +29,16 @@ pip install opencv-python numpy
 
 
 ## Usage
-
-1. Run the script:
+1.Before running the scripts:
+ please download the caffe model weights and haarcascade_frontalface_default.xml  from packages_needed folder, and place it under the same directory of this code file.
+ 
+2. Run the script:
 
 python age_gender_prediction_video_model1.py
 
-2. The webcam feed will open, and faces will be detected and labeled with predicted gender and age.
+3. The webcam feed will open, and faces will be detected and labeled with predicted gender and age.
 
-3. Press the `Esc` key to exit the program.
+4. Press the `Esc` key to exit the program.
 
 ## Configuration
 
