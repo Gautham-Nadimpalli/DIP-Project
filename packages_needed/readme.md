@@ -1,8 +1,6 @@
 All the training weights pretrained as well as trained models Can be found in this link.
 
-https://drive.google.com/drive/folders/18rektgGYzUBoc-nj9f8stPcDfqs9vfw_
-https://drive.google.com/drive/folders/18rektgGYzUBoc-nj9f8stPcDfqs9vfw_
-
+https://drive.google.com/drive/folders/18rektgGYzUBoc-nj9f8stPcDfqs9vfw_?usp=drive_link
 
 # Files Provided:
 ## Pre-trained Models weights:
